@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
     Copyright (C) 2013 by Hugh Bailey <obs.jim@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -38,289 +38,304 @@ using namespace std;
 #include <util/windows/ComPtr.hpp>
 
 static inline bool check_path(const char* data, const char *path,
-		string &output)
+                              string &output)
 {
-	ostringstream str;
-	str << path << data;
-	output = str.str();
+   ostringstream str;
+   str << path << data;
+   output = str.str();
 
-	printf("Attempted path: %s\n", output.c_str());
+   printf("Attempted path: %s\n", output.c_str());
 
-	return os_file_exists(output.c_str());
+   return os_file_exists(output.c_str());
 }
 
 bool GetDataFilePath(const char *data, string &output)
 {
-	if (check_path(data, "data/obs-studio/", output))
-		return true;
+   if (check_path(data, "data/obs-studio/", output))
+      return true;
 
-	return check_path(data, OBS_DATA_PATH "/obs-studio/", output);
+   return check_path(data, OBS_DATA_PATH "/obs-studio/", output);
 }
 
 bool InitApplicationBundle()
 {
-	return true;
+   return true;
 }
 
 string GetDefaultVideoSavePath()
 {
-	wchar_t path_utf16[MAX_PATH];
-	char    path_utf8[MAX_PATH]  = {};
+   wchar_t path_utf16[MAX_PATH];
+   char    path_utf8[MAX_PATH]  = {};
 
-	SHGetFolderPathW(NULL, CSIDL_MYVIDEO, NULL, SHGFP_TYPE_CURRENT,
-			path_utf16);
+   SHGetFolderPathW(NULL, CSIDL_MYVIDEO, NULL, SHGFP_TYPE_CURRENT,
+                    path_utf16);
 
-	os_wcs_to_utf8(path_utf16, wcslen(path_utf16), path_utf8, MAX_PATH);
-	return string(path_utf8);
+   os_wcs_to_utf8(path_utf16, wcslen(path_utf16), path_utf8, MAX_PATH);
+   return string(path_utf8);
 }
 
 static vector<string> GetUserPreferredLocales()
 {
-	vector<string> result;
+   vector<string> result;
 
-	ULONG num, length = 0;
-	if (!GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &num,
-				nullptr, &length))
-		return result;
+   ULONG num, length = 0;
+   if (!GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &num,
+                                    nullptr, &length))
+      return result;
 
-	vector<wchar_t> buffer(length);
-	if (!GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &num,
-				&buffer.front(), &length))
-		return result;
+   vector<wchar_t> buffer(length);
+   if (!GetUserPreferredUILanguages(MUI_LANGUAGE_NAME, &num,
+                                    &buffer.front(), &length))
+      return result;
 
-	result.reserve(num);
-	auto start = begin(buffer);
-	auto end_  = end(buffer);
-	decltype(start) separator;
-	while ((separator = find(start, end_, 0)) != end_) {
-		if (result.size() == num)
-			break;
+   result.reserve(num);
+   auto start = begin(buffer);
+   auto end_  = end(buffer);
+   decltype(start) separator;
+   while ((separator = find(start, end_, 0)) != end_)
+   {
+      if (result.size() == num)
+         break;
 
-		char conv[MAX_PATH] = {};
-		os_wcs_to_utf8(&*start, separator - start, conv, MAX_PATH);
+      char conv[MAX_PATH] = {};
+      os_wcs_to_utf8(&*start, separator - start, conv, MAX_PATH);
 
-		result.emplace_back(conv);
+      result.emplace_back(conv);
 
-		start = separator + 1;
-	}
+      start = separator + 1;
+   }
 
-	return result;
+   return result;
 }
 
 vector<string> GetPreferredLocales()
 {
-	vector<string> windows_locales = GetUserPreferredLocales();
-	auto obs_locales = GetLocaleNames();
-	auto windows_to_obs = [&obs_locales](string windows) {
-		string lang_match;
+   vector<string> windows_locales = GetUserPreferredLocales();
+   auto obs_locales = GetLocaleNames();
+   auto windows_to_obs = [&obs_locales](string windows)
+   {
+      string lang_match;
 
-		for (auto &locale_pair : obs_locales) {
-			auto &locale = locale_pair.first;
-			if (locale == windows.substr(0, locale.size()))
-				return locale;
+      for (auto &locale_pair : obs_locales)
+      {
+         auto &locale = locale_pair.first;
+         if (locale == windows.substr(0, locale.size()))
+            return locale;
 
-			if (lang_match.size())
-				continue;
+         if (lang_match.size())
+            continue;
 
-			if (locale.substr(0, 2) == windows.substr(0, 2))
-				lang_match = locale;
-		}
+         if (locale.substr(0, 2) == windows.substr(0, 2))
+            lang_match = locale;
+      }
 
-		return lang_match;
-	};
+      return lang_match;
+   };
 
-	vector<string> result;
-	result.reserve(obs_locales.size());
+   vector<string> result;
+   result.reserve(obs_locales.size());
 
-	for (const string &locale : windows_locales) {
-		string match = windows_to_obs(locale);
-		if (!match.size())
-			continue;
+   for (const string &locale : windows_locales)
+   {
+      string match = windows_to_obs(locale);
+      if (!match.size())
+         continue;
 
-		if (find(begin(result), end(result), match) != end(result))
-			continue;
+      if (find(begin(result), end(result), match) != end(result))
+         continue;
 
-		result.emplace_back(match);
-	}
+      result.emplace_back(match);
+   }
 
-	return result;
+   return result;
 }
 
 uint32_t GetWindowsVersion()
 {
-	static uint32_t ver = 0;
+   static uint32_t ver = 0;
 
-	if (ver == 0) {
-		struct win_version_info ver_info;
+   if (ver == 0)
+   {
+      struct win_version_info ver_info;
 
-		get_win_ver(&ver_info);
-		ver = (ver_info.major << 8) | ver_info.minor;
-	}
+      get_win_ver(&ver_info);
+      ver = (ver_info.major << 8) | ver_info.minor;
+   }
 
-	return ver;
+   return ver;
 }
 
 void SetAeroEnabled(bool enable)
 {
-	static HRESULT (WINAPI *func)(UINT) = nullptr;
-	static bool failed = false;
+   static HRESULT (WINAPI *func)(UINT) = nullptr;
+   static bool failed = false;
 
-	if (!func) {
-		if (failed) {
-			return;
-		}
+   if (!func)
+   {
+      if (failed)
+      {
+         return;
+      }
 
-		HMODULE dwm = LoadLibraryW(L"dwmapi");
-		if (!dwm) {
-			failed = true;
-			return;
-		}
+      HMODULE dwm = LoadLibraryW(L"dwmapi");
+      if (!dwm)
+      {
+         failed = true;
+         return;
+      }
 
-		func = reinterpret_cast<decltype(func)>(GetProcAddress(dwm,
-						"DwmEnableComposition"));
-		if (!func) {
-			failed = true;
-			return;
-		}
-	}
+      func = reinterpret_cast<decltype(func)>(GetProcAddress(dwm,
+                                              "DwmEnableComposition"));
+      if (!func)
+      {
+         failed = true;
+         return;
+      }
+   }
 
-	func(enable ? DWM_EC_ENABLECOMPOSITION : DWM_EC_DISABLECOMPOSITION);
+   func(enable ? DWM_EC_ENABLECOMPOSITION : DWM_EC_DISABLECOMPOSITION);
 }
 
 bool IsAlwaysOnTop(QWidget *window)
 {
-	DWORD exStyle = GetWindowLong((HWND)window->winId(), GWL_EXSTYLE);
-	return (exStyle & WS_EX_TOPMOST) != 0;
+   DWORD exStyle = GetWindowLong((HWND)window->winId(), GWL_EXSTYLE);
+   return (exStyle & WS_EX_TOPMOST) != 0;
 }
 
 void SetAlwaysOnTop(QWidget *window, bool enable)
 {
-	HWND hwnd = (HWND)window->winId();
-	SetWindowPos(hwnd, enable ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0,
-			SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+   HWND hwnd = (HWND)window->winId();
+   SetWindowPos(hwnd, enable ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0,
+                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 }
 
 void SetProcessPriority(const char *priority)
 {
-	if (!priority)
-		return;
+   if (!priority)
+      return;
 
-	if (strcmp(priority, "High") == 0)
-		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	else if (strcmp(priority, "AboveNormal") == 0)
-		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
-	else if (strcmp(priority, "Normal") == 0)
-		SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
-	else if (strcmp(priority, "BelowNormal") == 0)
-		SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
-	else if (strcmp(priority, "Idle") == 0)
-		SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
+   if (strcmp(priority, "High") == 0)
+      SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
+   else if (strcmp(priority, "AboveNormal") == 0)
+      SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
+   else if (strcmp(priority, "Normal") == 0)
+      SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
+   else if (strcmp(priority, "BelowNormal") == 0)
+      SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
+   else if (strcmp(priority, "Idle") == 0)
+      SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
 }
 
 void SetWin32DropStyle(QWidget *window)
 {
-	HWND hwnd = (HWND)window->winId();
-	LONG_PTR ex_style = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
-	ex_style |= WS_EX_ACCEPTFILES;
-	SetWindowLongPtr(hwnd, GWL_EXSTYLE, ex_style);
+   HWND hwnd = (HWND)window->winId();
+   LONG_PTR ex_style = GetWindowLongPtr(hwnd, GWL_EXSTYLE);
+   ex_style |= WS_EX_ACCEPTFILES;
+   SetWindowLongPtr(hwnd, GWL_EXSTYLE, ex_style);
 }
 
 bool DisableAudioDucking(bool disable)
 {
-	ComPtr<IMMDeviceEnumerator>   devEmum;
-	ComPtr<IMMDevice>             device;
-	ComPtr<IAudioSessionManager2> sessionManager2;
-	ComPtr<IAudioSessionControl>  sessionControl;
-	ComPtr<IAudioSessionControl2> sessionControl2;
+   ComPtr<IMMDeviceEnumerator>   devEmum;
+   ComPtr<IMMDevice>             device;
+   ComPtr<IAudioSessionManager2> sessionManager2;
+   ComPtr<IAudioSessionControl>  sessionControl;
+   ComPtr<IAudioSessionControl2> sessionControl2;
 
-	HRESULT result = CoCreateInstance(__uuidof(MMDeviceEnumerator),
-			nullptr, CLSCTX_INPROC_SERVER,
-			__uuidof(IMMDeviceEnumerator),
-			(void **)&devEmum);
-	if (FAILED(result))
-		return false;
+   HRESULT result = CoCreateInstance(__uuidof(MMDeviceEnumerator),
+                                     nullptr, CLSCTX_INPROC_SERVER,
+                                     __uuidof(IMMDeviceEnumerator),
+                                     (void **)&devEmum);
+   if (FAILED(result))
+      return false;
 
-	result = devEmum->GetDefaultAudioEndpoint(eRender, eConsole, &device);
-	if (FAILED(result))
-		return false;
+   result = devEmum->GetDefaultAudioEndpoint(eRender, eConsole, &device);
+   if (FAILED(result))
+      return false;
 
-	result = device->Activate(__uuidof(IAudioSessionManager2),
-			CLSCTX_INPROC_SERVER, nullptr,
-			(void **)&sessionManager2);
-	if (FAILED(result))
-		return false;
+   result = device->Activate(__uuidof(IAudioSessionManager2),
+                             CLSCTX_INPROC_SERVER, nullptr,
+                             (void **)&sessionManager2);
+   if (FAILED(result))
+      return false;
 
-	result = sessionManager2->GetAudioSessionControl(nullptr, 0,
-			&sessionControl);
-	if (FAILED(result))
-		return false;
+   result = sessionManager2->GetAudioSessionControl(nullptr, 0,
+            &sessionControl);
+   if (FAILED(result))
+      return false;
 
-	result = sessionControl->QueryInterface(&sessionControl2);
-	if (FAILED(result))
-		return false;
+   result = sessionControl->QueryInterface(&sessionControl2);
+   if (FAILED(result))
+      return false;
 
-	result = sessionControl2->SetDuckingPreference(disable);
-	return SUCCEEDED(result);
+   result = sessionControl2->SetDuckingPreference(disable);
+   return SUCCEEDED(result);
 }
 
-struct RunOnceMutexData {
-	WinHandle handle;
+struct RunOnceMutexData
+{
+   WinHandle handle;
 
-	inline RunOnceMutexData(HANDLE h) : handle(h) {}
+   inline RunOnceMutexData(HANDLE h) : handle(h) {}
 };
 
 RunOnceMutex::RunOnceMutex(RunOnceMutex &&rom)
 {
-	delete data;
-	data = rom.data;
-	rom.data = nullptr;
+   delete data;
+   data = rom.data;
+   rom.data = nullptr;
 }
 
 RunOnceMutex::~RunOnceMutex()
 {
-	delete data;
+   delete data;
 }
 
 RunOnceMutex &RunOnceMutex::operator=(RunOnceMutex &&rom)
 {
-	delete data;
-	data = rom.data;
-	rom.data = nullptr;
-	return *this;
+   delete data;
+   data = rom.data;
+   rom.data = nullptr;
+   return *this;
 }
 
 RunOnceMutex GetRunOnceMutex(bool &already_running)
 {
-	string name;
+   string name;
 
-	if (!portable_mode) {
-		name = "OBSStudioCore";
-	} else {
-		char path[500];
-		*path = 0;
-		GetConfigPath(path, sizeof(path), "");
-		name = "OBSStudioPortable";
-		name += path;
-	}
+   if (!portable_mode)
+   {
+      name = "OBSStudioCore";
+   }
+   else
+   {
+      char path[500];
+      *path = 0;
+      GetConfigPath(path, sizeof(path), "");
+      name = "OBSStudioPortable";
+      name += path;
+   }
 
-	BPtr<wchar_t> wname;
-	os_utf8_to_wcs_ptr(name.c_str(), name.size(), &wname);
+   BPtr<wchar_t> wname;
+   os_utf8_to_wcs_ptr(name.c_str(), name.size(), &wname);
 
-	if (wname) {
-		wchar_t *temp = wname;
-		while (*temp) {
-			if (!iswalnum(*temp))
-				*temp = L'_';
-			temp++;
-		}
-	}
+   if (wname)
+   {
+      wchar_t *temp = wname;
+      while (*temp)
+      {
+         if (!iswalnum(*temp))
+            *temp = L'_';
+         temp++;
+      }
+   }
 
-	HANDLE h = OpenMutexW(SYNCHRONIZE, false, wname.Get());
-	already_running = !!h;
+   HANDLE h = OpenMutexW(SYNCHRONIZE, false, wname.Get());
+   already_running = !!h;
 
-	if (!already_running)
-		h = CreateMutexW(nullptr, false, wname.Get());
+   if (!already_running)
+      h = CreateMutexW(nullptr, false, wname.Get());
 
-	RunOnceMutex rom(h ? new RunOnceMutexData(h) : nullptr);
-	return rom;
+   RunOnceMutex rom(h ? new RunOnceMutexData(h) : nullptr);
+   return rom;
 }

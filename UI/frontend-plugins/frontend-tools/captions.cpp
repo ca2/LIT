@@ -1,4 +1,4 @@
-#include <QMessageBox>
+﻿#include <QMessageBox>
 
 #include <windows.h>
 #include <obs-frontend-api.h>
@@ -33,7 +33,7 @@ using namespace std;
 struct obs_captions {
 	string handler_id = DEFAULT_HANDLER;
 	string source_name;
-	OBSWeakSource source;
+	LITWeakSource source;
 	unique_ptr<captions_handler> handler;
 	LANGID lang_id = GetUserDefaultUILanguage();
 
@@ -87,7 +87,7 @@ CaptionsDialog::CaptionsDialog(QWidget *parent) :
 		if (caps & OBS_SOURCE_AUDIO)
 			ui->source->addItem(name);
 
-		OBSWeakSource weak = OBSGetWeakRef(source);
+		LITWeakSource weak = LITGetWeakRef(source);
 		if (weak == captions->source)
 			ui->source->setCurrentText(name);
 		return true;
@@ -251,7 +251,7 @@ void obs_captions::start()
 		for (size_t i = 0; i < len; i++)
 			lang_name[i] = (char)wname[i];
 
-		OBSSource s = OBSGetStrongRef(source);
+		OBSSource s = LITGetStrongRef(source);
 		if (!s) {
 			warn("Source invalid");
 			return;
@@ -262,7 +262,7 @@ void obs_captions::start()
 					lang_name);
 			handler.reset(h);
 
-			OBSSource s = OBSGetStrongRef(source);
+			OBSSource s = LITGetStrongRef(source);
 			obs_source_add_audio_capture_callback(s,
 					audio_capture, nullptr);
 
@@ -282,7 +282,7 @@ void obs_captions::start()
 
 void obs_captions::stop()
 {
-	OBSSource s = OBSGetStrongRef(source);
+	OBSSource s = LITGetStrongRef(source);
 	if (s)
 		obs_source_remove_audio_capture_callback(s,
 				audio_capture, nullptr);

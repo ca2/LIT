@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
     Copyright (C) 2013-2014 by Hugh Bailey <jim@obsproject.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -238,23 +238,23 @@ struct obs_source_frame {
 };
 
 /* ------------------------------------------------------------------------- */
-/* OBS context */
+/* LIT context */
 
 /**
- * Initializes OBS
+ * Initializes LIT
  *
  * @param  locale              The locale to use for modules
  * @param  module_config_path  Path to module config storage directory
  *                             (or NULL if none)
- * @param  store               The profiler name store for OBS to use or NULL
+ * @param  store               The profiler name store for LIT to use or NULL
  */
 EXPORT bool obs_startup(const char *locale, const char *module_config_path,
 		profiler_name_store_t *store);
 
-/** Releases all data associated with OBS and terminates the OBS context */
+/** Releases all data associated with LIT and terminates the LIT context */
 EXPORT void obs_shutdown(void);
 
-/** @return true if the main OBS context has been initialized */
+/** @return true if the main LIT context has been initialized */
 EXPORT bool obs_initialized(void);
 
 /** @return The current core version */
@@ -275,7 +275,7 @@ EXPORT void obs_set_locale(const char *locale);
 EXPORT const char *obs_get_locale(void);
 
 /**
- * Returns the profiler name store (see util/profiler.h) used by OBS, which is
+ * Returns the profiler name store (see util/profiler.h) used by LIT, which is
  * either a name store passed to obs_startup, an internal name store, or NULL
  * in case obs_initialized() returns false.
  */
@@ -286,7 +286,7 @@ EXPORT profiler_name_store_t *obs_get_profiler_name_store(void);
  *
  * @note This data cannot be changed if an output is currently active.
  * @note The graphics module cannot be changed without fully destroying the
- *       OBS context.
+ *       LIT context.
  *
  * @param   ovi  Pointer to an obs_video_info structure containing the
  *               specification of the graphics subsystem,
@@ -463,16 +463,16 @@ EXPORT bool obs_enum_encoder_types(size_t idx, const char **id);
 /** Enumerates all available service types. */
 EXPORT bool obs_enum_service_types(size_t idx, const char **id);
 
-/** Helper function for entering the OBS graphics context */
+/** Helper function for entering the LIT graphics context */
 EXPORT void obs_enter_graphics(void);
 
-/** Helper function for leaving the OBS graphics context */
+/** Helper function for leaving the LIT graphics context */
 EXPORT void obs_leave_graphics(void);
 
-/** Gets the main audio output handler for this OBS context */
+/** Gets the main audio output handler for this LIT context */
 EXPORT audio_t *obs_get_audio(void);
 
-/** Gets the main video output handler for this OBS context */
+/** Gets the main video output handler for this LIT context */
 EXPORT video_t *obs_get_video(void);
 
 /** Sets the primary output source for a channel. */

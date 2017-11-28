@@ -3,14 +3,14 @@
 Unicode true
 
 ; Define your application name
-!define APPNAME "OBS Studio"
+!define APPNAME "LIT"
 
 !ifndef APPVERSION
-!define APPVERSION "17.0.2"
-!define SHORTVERSION "17.0.2"
+!define APPVERSION "0.01"
+!define SHORTVERSION "0.01"
 !endif
 
-!define APPNAMEANDVERSION "OBS Studio ${SHORTVERSION}"
+!define APPNAMEANDVERSION "LIT ${SHORTVERSION}"
 ; !define FULL
 !define REALSENSE_PLUGIN
 
@@ -20,12 +20,12 @@ Unicode true
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
-InstallDir "$PROGRAMFILES32\obs-studio"
+InstallDir "$PROGRAMFILES32\LIT"
 InstallDirRegKey HKLM "Software\${APPNAME}" ""
 !ifdef FULL
-OutFile "OBS-Studio-${SHORTVERSION}-Full-Installer.exe"
+OutFile "LIT-${SHORTVERSION}.exe"
 !else
-OutFile "OBS-Studio-${SHORTVERSION}-Small-Installer.exe"
+OutFile "LIT-${SHORTVERSION}-Small-Installer.exe"
 !endif
 
 ; Use compression
@@ -39,13 +39,13 @@ RequestExecutionLevel admin
 
 !define MUI_ABORTWARNING
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Launch OBS Studio ${SHORTVERSION}"
+!define MUI_FINISHPAGE_RUN_TEXT "Launch LIT ${SHORTVERSION}"
 !define MUI_FINISHPAGE_RUN_FUNCTION "LaunchOBS"
 
 !define MUI_PAGE_CUSTOMFUNCTION_LEAVE PreReqCheck
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "new\core\data\obs-studio\license\gplv2.txt"
+!insertmacro MUI_PAGE_LICENSE "new\core\data\LIT\license\gplv2.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 !ifdef FULL
 	!insertmacro MUI_PAGE_COMPONENTS
@@ -115,11 +115,11 @@ Function PreReqCheck
 
 	; 64 bit Visual Studio 2013 runtime check
 	${if} ${RunningX64}
-		SetOutPath "$TEMP\OBS"
+		SetOutPath "$TEMP\LIT"
 		File check_for_64bit_visual_studio_2013_runtimes.exe
-		ExecWait "$TEMP\OBS\check_for_64bit_visual_studio_2013_runtimes.exe" $R0
-		Delete "$TEMP\OBS\check_for_64bit_visual_studio_2013_runtimes.exe"
-		RMDir "$TEMP\OBS"
+		ExecWait "$TEMP\LIT\check_for_64bit_visual_studio_2013_runtimes.exe" $R0
+		Delete "$TEMP\LIT\check_for_64bit_visual_studio_2013_runtimes.exe"
+		RMDir "$TEMP\LIT"
 		IntCmp $R0 126 vs2013Missing vs2013OK2
 		vs2013OK2:
 		ClearErrors
@@ -202,26 +202,26 @@ Function PreReqCheck
 	OBSInstallerUtils::AddInUseFileCheck "$INSTDIR\data\obs-plugins\win-capture\graphics-hook64.dll"
 	OBSInstallerUtils::GetAppNameForInUseFiles
 	StrCmp $R0 "" gameCaptureNotRunning
-		MessageBox MB_OK|MB_ICONEXCLAMATION "Game Capture is still in use by the following applications:$\r$\n$\r$\n$R0$\r$\nPlease close these applications before installing a new version of OBS." /SD IDOK
+		MessageBox MB_OK|MB_ICONEXCLAMATION "Game Capture is still in use by the following applications:$\r$\n$\r$\n$R0$\r$\nPlease close these applications before installing a new version of LIT." /SD IDOK
 		Quit
 	gameCaptureNotRunning:
 FunctionEnd
 
 Function filesInUse
-	MessageBox MB_OK|MB_ICONEXCLAMATION "Some files were not able to be installed. If this is the first time you are installing OBS, please disable any anti-virus or other security software and try again. If you are re-installing or updating OBS, close any applications that may be have been hooked, or reboot and try again."  /SD IDOK
+	MessageBox MB_OK|MB_ICONEXCLAMATION "Some files were not able to be installed. If this is the first time you are installing LIT, please disable any anti-virus or other security software and try again. If you are re-installing or updating LIT, close any applications that may be have been hooked, or reboot and try again."  /SD IDOK
 FunctionEnd
 
 Function LaunchOBS
 	${if} ${RunningX64}
-		Exec '"$WINDIR\explorer.exe" "$SMPROGRAMS\OBS Studio\OBS Studio (64bit).lnk"'
+		Exec '"$WINDIR\explorer.exe" "$SMPROGRAMS\LIT\LIT (64bit).lnk"'
 	${else}
-		Exec '"$WINDIR\explorer.exe" "$SMPROGRAMS\OBS Studio\OBS Studio (32bit).lnk"'
+		Exec '"$WINDIR\explorer.exe" "$SMPROGRAMS\LIT\LIT (32bit).lnk"'
 	${endif}
 FunctionEnd
 
 Var outputErrors
 
-Section "OBS Studio" SecCore
+Section "LIT" SecCore
 
 	; Set Section properties
 	SectionIn RO
@@ -255,28 +255,28 @@ Section "OBS Studio" SecCore
 	WriteUninstaller "$INSTDIR\uninstall.exe"
 
 	; Delete Old "Multiplatform" Shortcuts
-	Delete "$DESKTOP\OBS Multiplatform.lnk"
-	Delete "$SMPROGRAMS\OBS Multiplatform\OBS Multiplatform (32bit).lnk"
-	Delete "$SMPROGRAMS\OBS Multiplatform\Uninstall.lnk"
+	Delete "$DESKTOP\LIT Multiplatform.lnk"
+	Delete "$SMPROGRAMS\LIT Multiplatform\LIT Multiplatform (32bit).lnk"
+	Delete "$SMPROGRAMS\LIT Multiplatform\Uninstall.lnk"
 	${if} ${RunningX64}
-		Delete "$SMPROGRAMS\OBS Multiplatform\OBS Multiplatform (64bit).lnk"
+		Delete "$SMPROGRAMS\LIT Multiplatform\LIT Multiplatform (64bit).lnk"
 	${endif}
 
 	${if} ${RunningX64}
 		SetOutPath "$INSTDIR\bin\64bit"
-		CreateShortCut "$DESKTOP\OBS Studio.lnk" "$INSTDIR\bin\64bit\obs64.exe"
+		CreateShortCut "$DESKTOP\LIT.lnk" "$INSTDIR\bin\64bit\obs64.exe"
 	${else}
 		SetOutPath "$INSTDIR\bin\32bit"
-		CreateShortCut "$DESKTOP\OBS Studio.lnk" "$INSTDIR\bin\32bit\obs32.exe"
+		CreateShortCut "$DESKTOP\LIT.lnk" "$INSTDIR\bin\32bit\obs32.exe"
 	${endif}
 	SetOutPath "$INSTDIR\bin\32bit"
-	CreateDirectory "$SMPROGRAMS\OBS Studio"
-	CreateShortCut "$SMPROGRAMS\OBS Studio\OBS Studio (32bit).lnk" "$INSTDIR\bin\32bit\obs32.exe"
-	CreateShortCut "$SMPROGRAMS\OBS Studio\Uninstall.lnk" "$INSTDIR\uninstall.exe"
+	CreateDirectory "$SMPROGRAMS\LIT"
+	CreateShortCut "$SMPROGRAMS\LIT\LIT (32bit).lnk" "$INSTDIR\bin\32bit\obs32.exe"
+	CreateShortCut "$SMPROGRAMS\LIT\Uninstall.lnk" "$INSTDIR\uninstall.exe"
 
 	${if} ${RunningX64}
 		SetOutPath "$INSTDIR\bin\64bit"
-		CreateShortCut "$SMPROGRAMS\OBS Studio\OBS Studio (64bit).lnk" "$INSTDIR\bin\64bit\obs64.exe"
+		CreateShortCut "$SMPROGRAMS\LIT\LIT (64bit).lnk" "$INSTDIR\bin\64bit\obs64.exe"
 	${endif}
 
 	SetOutPath "$INSTDIR\bin\32bit"
@@ -350,7 +350,7 @@ Section -FinishSection
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "UninstallString" "$INSTDIR\uninstall.exe"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "ProductID" "d16d2409-3151-4331-a9b1-dfd8cf3f0d9c"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayIcon" "$INSTDIR\bin\32bit\obs32.exe"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "Publisher" "OBS Project"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "Publisher" "LIT Project"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "HelpLink" "https://obsproject.com"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" "DisplayVersion" "${APPVERSION}"
 
@@ -358,7 +358,7 @@ SectionEnd
 
 ; Modern install component descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-	!insertmacro MUI_DESCRIPTION_TEXT ${SecCore} "Core OBS Studio files"
+	!insertmacro MUI_DESCRIPTION_TEXT ${SecCore} "Core LIT files"
 	!ifdef FULL
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPlugins} "Optional Plugins"
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecPlugins_Browser} "Browser plugin (a source you can add to your scenes that displays web pages)"
@@ -369,7 +369,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;Uninstall section
-Section "un.obs-studio Program Files" UninstallSection1
+Section "un.LIT Program Files" UninstallSection1
 
 	SectionIn RO
 
@@ -381,11 +381,11 @@ Section "un.obs-studio Program Files" UninstallSection1
 	Delete "$INSTDIR\uninstall.exe"
 
 	; Delete Shortcuts
-	Delete "$DESKTOP\OBS Studio.lnk"
-	Delete "$SMPROGRAMS\OBS Studio\OBS Studio (32bit).lnk"
-	Delete "$SMPROGRAMS\OBS Studio\Uninstall.lnk"
+	Delete "$DESKTOP\LIT.lnk"
+	Delete "$SMPROGRAMS\LIT\LIT (32bit).lnk"
+	Delete "$SMPROGRAMS\LIT\Uninstall.lnk"
 	${if} ${RunningX64}
-		Delete "$SMPROGRAMS\OBS Studio\OBS Studio (64bit).lnk"
+		Delete "$SMPROGRAMS\LIT\LIT (64bit).lnk"
 	${endif}
 
 	IfFileExists "$INSTDIR\data\obs-plugins\win-ivcam\seg_service.exe" UnregisterSegService SkipUnreg
@@ -393,33 +393,33 @@ Section "un.obs-studio Program Files" UninstallSection1
 	ExecWait '"$INSTDIR\data\obs-plugins\win-ivcam\seg_service.exe" /UnregServer'
 	SkipUnreg:
 
-	; Clean up OBS Studio
+	; Clean up LIT
 	RMDir /r "$INSTDIR\bin"
 	RMDir /r "$INSTDIR\data"
 	RMDir /r "$INSTDIR\obs-plugins"
 	RMDir "$INSTDIR"
 
 	; Remove remaining directories
-	RMDir "$SMPROGRAMS\OBS Studio"
-	RMDir "$INSTDIR\OBS Studio"
+	RMDir "$SMPROGRAMS\LIT"
+	RMDir "$INSTDIR\LIT"
 SectionEnd
 
 Section /o "un.User Settings" UninstallSection2
-	RMDir /R "$APPDATA\obs-studio"
+	RMDir /R "$APPDATA\LIT"
 SectionEnd
 
 !insertmacro MUI_UNFUNCTION_DESCRIPTION_BEGIN
-	!insertmacro MUI_DESCRIPTION_TEXT ${UninstallSection1} "Remove the OBS program files."
+	!insertmacro MUI_DESCRIPTION_TEXT ${UninstallSection1} "Remove the LIT program files."
 	!insertmacro MUI_DESCRIPTION_TEXT ${UninstallSection2} "Removes all settings, plugins, scenes and sources, profiles, log files and other application data."
 !insertmacro MUI_UNFUNCTION_DESCRIPTION_END
 
 ; Version information
 VIProductVersion "${APPVERSION}.0"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "OBS Studio"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "obsproject.com"
-VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "(c) 2012-2016"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "LIT"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "LIT, Inc."
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "(c) 2017"
 ; FileDescription is what shows in the UAC elevation prompt when signed
-VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "OBS Studio"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "LIT"
 VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "1.0"
 
 ; eof

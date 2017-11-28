@@ -217,7 +217,7 @@ static void pulseaudio_source_info(pa_context *c, const pa_source_info *i,
 	if (pulseaudio_to_obs_audio_format(format) == AUDIO_FORMAT_UNKNOWN) {
 		format = PA_SAMPLE_S16LE;
 
-		blog(LOG_INFO, "Sample format %s not supported by OBS,"
+		blog(LOG_INFO, "Sample format %s not supported by LIT,"
 				"using %s instead for recording",
 				pa_sample_format_to_string(
 						i->sample_spec.format),
@@ -228,7 +228,7 @@ static void pulseaudio_source_info(pa_context *c, const pa_source_info *i,
 	if (pulseaudio_channels_to_obs_speakers(channels) == SPEAKERS_UNKNOWN) {
 		channels = 2;
 
-		blog(LOG_INFO, "%c channels not supported by OBS,"
+		blog(LOG_INFO, "%c channels not supported by LIT,"
 				"using %c instead for recording",
 				i->sample_spec.channels,
 				channels);

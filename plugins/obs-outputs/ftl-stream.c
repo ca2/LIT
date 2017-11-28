@@ -916,7 +916,7 @@ static enum ret_type ftl_event(struct ftl_stream *stream,
 		return RET_BREAK;
 	}
 
-	//tell OBS and it will trigger a reconnection
+	//tell LIT and it will trigger a reconnection
 	blog(LOG_WARNING, "Reconnecting to Ingest");
 	obs_output_signal_stop(stream->output, OBS_OUTPUT_DISCONNECTED);
 	return RET_EXIT;
@@ -1095,7 +1095,7 @@ static int init_connect(struct ftl_stream *stream)
 	stream->params.video_codec = FTL_VIDEO_H264;
 	stream->params.audio_codec = FTL_AUDIO_OPUS;
 	stream->params.ingest_hostname = stream->path.array;
-	stream->params.vendor_name = "OBS Studio";
+	stream->params.vendor_name = "LIT Studio";
 	stream->params.vendor_version = OBS_VERSION;
 	stream->params.peak_kbps =
 		stream->peak_kbps < 0 ? 0 : stream->peak_kbps;
@@ -1138,7 +1138,7 @@ static int init_connect(struct ftl_stream *stream)
 // Returns 0 on success
 static int _ftl_error_to_obs_error(int status)
 {
-	/* Map FTL errors to OBS errors */
+	/* Map FTL errors to LIT errors */
 
 	switch (status) {
 	case FTL_SUCCESS:

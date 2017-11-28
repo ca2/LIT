@@ -1,4 +1,4 @@
-# This module can be copied and used by external plugins for OBS
+# This module can be copied and used by external plugins for LIT
 #
 # Once done these will be defined:
 #

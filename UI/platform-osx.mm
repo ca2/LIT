@@ -31,7 +31,7 @@ using namespace std;
 bool GetDataFilePath(const char *data, string &output)
 {
 	stringstream str;
-	str << OBS_DATA_PATH "/obs-studio/" << data;
+	str << OBS_DATA_PATH "/lit-studio/" << data;
 	output = str.str();
 	return !access(output.c_str(), R_OK);
 }

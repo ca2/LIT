@@ -102,7 +102,7 @@ static pa_proplist *pulseaudio_properties()
 {
 	pa_proplist *p = pa_proplist_new();
 
-	pa_proplist_sets(p, PA_PROP_APPLICATION_NAME, "OBS");
+	pa_proplist_sets(p, PA_PROP_APPLICATION_NAME, "LIT");
 	pa_proplist_sets(p, PA_PROP_APPLICATION_ICON_NAME, "obs");
 	pa_proplist_sets(p, PA_PROP_MEDIA_ROLE, "production");
 
@@ -119,7 +119,7 @@ static void pulseaudio_init_context()
 	pa_proplist *p = pulseaudio_properties();
 	pulseaudio_context = pa_context_new_with_proplist(
 			pa_threaded_mainloop_get_api(pulseaudio_mainloop),
-			"OBS-Monitor", p);
+			"LIT-Monitor", p);
 
 	pa_context_set_state_callback(pulseaudio_context,
 			pulseaudio_context_state_changed, NULL);

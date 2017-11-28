@@ -750,10 +750,10 @@ QDialogButtonBox QPushButton:disabled {
 }
 
 /*******************************/
-/* --- OBS Main UI Buttons --- */
+/* --- LIT Main UI Buttons --- */
 /********************************/
 /* This will style the buttons  */
-/* from the main OBS UI apart   */
+/* from the main LIT UI apart   */
 /* from the rest of the general */
 /* button styles. Currently     */
 /* these match, but left in for */

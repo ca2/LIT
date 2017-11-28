@@ -1,4 +1,4 @@
-#include <obs-frontend-api.h>
+﻿#include <obs-frontend-api.h>
 #include <obs-module.h>
 #include <obs.hpp>
 #include <util/util.hpp>
@@ -279,7 +279,7 @@ extern "C" void FreeOutputTimer()
 {
 }
 
-static void OBSEvent(enum obs_frontend_event event, void *)
+static void LITEvent(enum obs_frontend_event event, void *)
 {
 	if (event == OBS_FRONTEND_EVENT_EXIT) {
 		obs_frontend_save();
@@ -314,7 +314,7 @@ extern "C" void InitOutputTimer()
 	obs_frontend_pop_ui_translation();
 
 	obs_frontend_add_save_callback(SaveOutputTimer, nullptr);
-	obs_frontend_add_event_callback(OBSEvent, nullptr);
+	obs_frontend_add_event_callback(LITEvent, nullptr);
 
 	action->connect(action, &QAction::triggered, cb);
 }

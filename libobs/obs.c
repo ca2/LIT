@@ -603,7 +603,7 @@ static void obs_free_data(void)
 
 	obs_main_view_free(&data->main_view);
 
-	blog(LOG_INFO, "Freeing OBS context data");
+	blog(LOG_INFO, "Freeing LIT context data");
 
 	FREE_OBS_LINKED_LIST(source);
 	FREE_OBS_LINKED_LIST(output);

@@ -83,7 +83,7 @@ static void CreateOBS(HWND hwnd)
 	GetClientRect(hwnd, &rc);
 
 	if (!obs_startup("en-US", nullptr, nullptr))
-		throw "Couldn't create OBS";
+		throw "Couldn't create LIT";
 
 	struct obs_video_info ovi;
 	ovi.adapter         = 0;
@@ -171,7 +171,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR cmdLine,
 			throw "Couldn't create main window";
 
 		/* ------------------------------------------------------ */
-		/* create OBS */
+		/* create LIT */
 		CreateOBS(hwnd);
 
 		/* ------------------------------------------------------ */

@@ -550,7 +550,7 @@ static void *game_capture_create(obs_data_t *settings, obs_source_t *source)
 
 #define STOP_BEING_BAD \
 	"  This is most likely due to security software. Please make sure " \
-        "that the OBS installation folder is excluded/ignored in the "      \
+        "that the LIT installation folder is excluded/ignored in the "      \
         "settings of the security software you are using."
 
 static bool check_file_integrity(struct game_capture *gc, const char *file,

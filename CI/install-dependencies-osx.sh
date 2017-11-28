@@ -16,13 +16,13 @@ sudo installer -pkg ./Packages.pkg -target /
 
 brew update
 
-#Base OBS Deps and ccache
+#Base LIT Deps and ccache
 brew install qt5 jack speexdsp ccache
 
 export PATH=/usr/local/opt/ccache/libexec:$PATH
 ccache -s || echo "CCache is not available."
 
-# Fetch and untar prebuilt OBS deps that are compatible with older versions of OSX
+# Fetch and untar prebuilt LIT deps that are compatible with older versions of OSX
 wget --retry-connrefused --waitretry=1 https://s3-us-west-2.amazonaws.com/obs-nightly/osx-deps.tar.gz
 tar -xf ./osx-deps.tar.gz -C /tmp
 

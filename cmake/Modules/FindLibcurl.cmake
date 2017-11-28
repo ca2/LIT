@@ -4,7 +4,7 @@
 #  LIBCURL_INCLUDE_DIRS
 #  LIBCURL_LIBRARIES
 #
-# For use in OBS:
+# For use in LIT:
 #
 #  CURL_INCLUDE_DIR
 

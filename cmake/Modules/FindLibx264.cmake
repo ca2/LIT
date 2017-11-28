@@ -4,7 +4,7 @@
 #  LIBX264_INCLUDE_DIRS
 #  LIBX264_LIBRARIES
 #
-# For use in OBS: 
+# For use in LIT: 
 #
 #  X264_INCLUDE_DIR
 

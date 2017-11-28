@@ -1,10 +1,10 @@
-OBS Studio <https://obsproject.com>
+LIT Studio <https://obsproject.com>
 ===================================
 
-What is OBS Studio?
+What is LIT Studio?
 -------------------
 
-  OBS Studio is software designed for capturing, compositing, encoding,
+  LIT Studio is software designed for capturing, compositing, encoding,
   recording, and streaming video content, efficiently.
 
   It's distributed under the GNU General Public License v2 - see the
@@ -15,11 +15,11 @@ Quick Links
 
  - Website: https://obsproject.com
 
- - Help/Guides: https://github.com/jp9000/obs-studio/wiki
+ - Help/Guides: https://github.com/ca2/LIT/wiki
 
  - Forums: https://obsproject.com/forum/
 
- - Build Instructions: https://github.com/jp9000/obs-studio/wiki/Install-Instructions
+ - Build Instructions: https://github.com/ca2/LIT/wiki/Install-Instructions
 
  - Bug Tracker: https://obsproject.com/mantis/
 
@@ -31,7 +31,7 @@ Contributing
 
  - If you wish to contribute code to the project, please make sure read
    the coding and commit guidelines:
-   https://github.com/jp9000/obs-studio/blob/master/CONTRIBUTING.rst
+   https://github.com/ca2/LIT/blob/master/CONTRIBUTING.rst
 
  - If you wish to contribute translations, do not submit pull requests.
    Instead, please use Crowdin.  For more information read this thread:

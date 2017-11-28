@@ -4,7 +4,7 @@
 #  RSSDK_INCLUDE_DIRS
 #  RSSDK_LIBRARIES
 #
-# For use in OBS:
+# For use in LIT:
 #
 #  RSSDK_INCLUDE_DIR
 

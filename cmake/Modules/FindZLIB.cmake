@@ -4,7 +4,7 @@
 #  ZLIB_INCLUDE_DIRS
 #  ZLIB_LIBRARIES
 #
-# For use in OBS: 
+# For use in LIT: 
 #
 #  ZLIB_INCLUDE_DIR
 

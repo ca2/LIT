@@ -453,7 +453,7 @@ void OBSBasicFilters::closeEvent(QCloseEvent *event)
 	main->SaveProject();
 }
 
-/* OBS Signals */
+/* LIT Signals */
 
 void OBSBasicFilters::OBSSourceFilterAdded(void *param, calldata_t *data)
 {

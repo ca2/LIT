@@ -87,9 +87,9 @@ static const char *color_correction_filter_name(void *unused)
 
 /*
  * This function is called (see bottom of this file for more details)
- * whenever the OBS filter interface changes. So when the user is messing
+ * whenever the LIT filter interface changes. So when the user is messing
  * with a slider this function is called to update the internal settings
- * in OBS, and hence the settings being passed to the CPU/GPU.
+ * in LIT, and hence the settings being passed to the CPU/GPU.
  */
 static void color_correction_filter_update(void *data, obs_data_t *settings)
 {
@@ -238,7 +238,7 @@ static void color_correction_filter_update(void *data, obs_data_t *settings)
 
 /*
  * Since this is C we have to be careful when destroying/removing items from
- * OBS. Jim has added several useful functions to help keep memory leaks to
+ * LIT. Jim has added several useful functions to help keep memory leaks to
  * a minimum, and handle the destruction and construction of these filters.
  */
 static void color_correction_filter_destroy(void *data)
@@ -255,7 +255,7 @@ static void color_correction_filter_destroy(void *data)
 }
 
 /*
- * When you apply a filter OBS creates it, and adds it to the source. OBS also
+ * When you apply a filter LIT creates it, and adds it to the source. LIT also
  * starts rendering it immediately. This function doesn't just 'create' the
  * filter, it also calls the render function (farther below) that contains the
  * actual rendering code.
@@ -305,7 +305,7 @@ static void *color_correction_filter_create(obs_data_t *settings,
 
 	/*
 	 * If the filter has been removed/deactivated, destroy the filter
-	 * and exit out so we don't crash OBS by telling it to update
+	 * and exit out so we don't crash LIT by telling it to update
 	 * values that don't exist anymore.
 	 */
 	if (!filter->effect) {
@@ -390,11 +390,11 @@ static void color_correction_filter_defaults(obs_data_t *settings)
 }
 
 /*
- * So how does OBS keep track of all these plug-ins/filters? How does OBS know
+ * So how does LIT keep track of all these plug-ins/filters? How does LIT know
  * which function to call when it needs to update a setting? Or a source? Or
  * what type of source this is?
  *
- * OBS does it through the obs_source_info_struct. Notice how variables are
+ * LIT does it through the obs_source_info_struct. Notice how variables are
  * assigned the name of a function? Notice how the function name has the
  * variable name in it? While not mandatory, it helps a ton for you (and those
  * reading your code) to follow this convention.

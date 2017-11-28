@@ -1,4 +1,4 @@
-/******************************************************************************
+﻿/******************************************************************************
  Copyright (C) 2017 Hugh Bailey <obs.jim@gmail.com>
 
  This program is free software; you can redistribute it and/or modify
@@ -346,7 +346,7 @@ bool DownloadWorkerThread()
 {
 	const DWORD tlsProtocols = WINHTTP_FLAG_SECURE_PROTOCOL_TLS1_2;
 
-	HttpHandle hSession = WinHttpOpen(L"OBS Studio Updater/2.1",
+	HttpHandle hSession = WinHttpOpen(L"LIT Studio Updater/2.1",
 	                                  WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
 	                                  WINHTTP_NO_PROXY_NAME,
 	                                  WINHTTP_NO_PROXY_BYPASS,
@@ -481,11 +481,11 @@ try {
 
 /* ----------------------------------------------------------------------- */
 
-#define WAITIFOBS_SUCCESS       0
-#define WAITIFOBS_WRONG_PROCESS 1
-#define WAITIFOBS_CANCELLED     2
+#define WAITIFLIT_SUCCESS       0
+#define WAITIFLIT_WRONG_PROCESS 1
+#define WAITIFLIT_CANCELLED     2
 
-static inline DWORD WaitIfOBS(DWORD id, const wchar_t *expected)
+static inline DWORD WaitIfLIT(DWORD id, const wchar_t *expected)
 {
 	wchar_t path[MAX_PATH];
 	wchar_t *name;
@@ -497,10 +497,10 @@ static inline DWORD WaitIfOBS(DWORD id, const wchar_t *expected)
 			SYNCHRONIZE,
 			false, id);
 	if (!proc.Valid())
-		return WAITIFOBS_WRONG_PROCESS;
+		return WAITIFLIT_WRONG_PROCESS;
 
 	if (!GetProcessImageFileName(proc, path, _countof(path)))
-		return WAITIFOBS_WRONG_PROCESS;
+		return WAITIFLIT_WRONG_PROCESS;
 
 	name = wcsrchr(path, L'\\');
 	if (name)
@@ -515,15 +515,15 @@ static inline DWORD WaitIfOBS(DWORD id, const wchar_t *expected)
 
 		int i = WaitForMultipleObjects(2, hWait, false, INFINITE);
 		if (i == WAIT_OBJECT_0 + 1)
-			return WAITIFOBS_CANCELLED;
+			return WAITIFLIT_CANCELLED;
 
-		return WAITIFOBS_SUCCESS;
+		return WAITIFLIT_SUCCESS;
 	}
 
-	return WAITIFOBS_WRONG_PROCESS;
+	return WAITIFLIT_WRONG_PROCESS;
 }
 
-static bool WaitForOBS()
+static bool WaitForLIT()
 {
 	DWORD proc_ids[1024], needed, count;
 	const wchar_t *name = is32bit ? L"obs32" : L"obs64";
@@ -537,12 +537,12 @@ static bool WaitForOBS()
 	for (DWORD i = 0; i < count; i++) {
 		DWORD id = proc_ids[i];
 		if (id != 0) {
-			switch (WaitIfOBS(id, name)) {
-			case WAITIFOBS_SUCCESS:
+			switch (WaitIfLIT(id, name)) {
+			case WAITIFLIT_SUCCESS:
 				return true;
-			case WAITIFOBS_WRONG_PROCESS:
+			case WAITIFLIT_WRONG_PROCESS:
 				break;
-			case WAITIFOBS_CANCELLED:
+			case WAITIFLIT_CANCELLED:
 				return false;
 			}
 		}
@@ -933,10 +933,10 @@ static wchar_t tempPath[MAX_PATH] = {};
 static bool Update(wchar_t *cmdLine)
 {
 	/* ------------------------------------- *
-	 * Check to make sure OBS isn't running  */
+	 * Check to make sure LIT isn't running  */
 
 	HANDLE hObsUpdateMutex = OpenMutexW(SYNCHRONIZE, false,
-			L"OBSStudioUpdateMutex");
+			L"LITStudioUpdateMutex");
 	if (hObsUpdateMutex) {
 		HANDLE hWait[2];
 		hWait[0] = hObsUpdateMutex;
@@ -953,7 +953,7 @@ static bool Update(wchar_t *cmdLine)
 			return false;
 	}
 
-	if (!WaitForOBS())
+	if (!WaitForLIT())
 		return false;
 
 	/* ------------------------------------- *
@@ -1017,7 +1017,7 @@ static bool Update(wchar_t *cmdLine)
 	}
 
 	StringCbCat(lpAppDataPath, sizeof(lpAppDataPath),
-			L"\\obs-studio");
+			L"\\lit-studio");
 
 	/* ------------------------------------- *
 	 * Get download path                     */
@@ -1035,7 +1035,7 @@ static bool Update(wchar_t *cmdLine)
 				GetLastError());
 		return false;
 	}
-	if (!GetTempFileNameW(tempDirName, L"obs-studio", 0, tempPath)) {
+	if (!GetTempFileNameW(tempDirName, L"lit-studio", 0, tempPath)) {
 		Status(L"Update failed: Failed to create temp dir name: %ld",
 				GetLastError());
 		return false;
@@ -1263,7 +1263,7 @@ static bool Update(wchar_t *cmdLine)
 		PBM_SETPOS, 100, 0);
 
 	Status(L"Update complete.");
-	SetDlgItemText(hwndMain, IDC_BUTTON, L"Launch OBS");
+	SetDlgItemText(hwndMain, IDC_BUTTON, L"Launch LIT");
 	return true;
 }
 
@@ -1311,7 +1311,7 @@ static void CancelUpdate(bool quit)
 	}
 }
 
-static void LaunchOBS()
+static void LaunchLIT()
 {
 	wchar_t cwd[MAX_PATH];
 	wchar_t newCwd[MAX_PATH];
@@ -1424,7 +1424,7 @@ static void RestartAsAdmin(LPWSTR lpCmdLine)
 
 		if (GetExitCodeProcess(shExInfo.hProcess, &exitCode)) {
 			if (exitCode == 1) {
-				LaunchOBS();
+				LaunchLIT();
 			}
 		}
 		CloseHandle(shExInfo.hProcess);
@@ -1437,7 +1437,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int)
 
 	if (!IsAppRunningAsAdminMode()) {
 		HANDLE hLowMutex = CreateMutexW(nullptr, true,
-				L"OBSUpdaterRunningAsNonAdminUser");
+				L"LITUpdaterRunningAsNonAdminUser");
 
 		RestartAsAdmin(lpCmdLine);
 
@@ -1493,9 +1493,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int)
 		/* there is no non-elevated process waiting for us if UAC is
 		 * disabled */
 		WinHandle hMutex = OpenMutex(SYNCHRONIZE, false,
-				L"OBSUpdaterRunningAsNonAdminUser");
+				L"LITUpdaterRunningAsNonAdminUser");
 		if (msg.wParam == 1 && !hMutex) {
-			LaunchOBS();
+			LaunchLIT();
 		}
 
 		return (int)msg.wParam;

@@ -374,7 +374,7 @@ try {
 	vector<string> extraHeaders;
 
 	BPtr<char> updateFilePath = GetConfigPathPtr(
-			"obs-studio\\updates\\updater.exe");
+			"lit-studio\\updates\\updater.exe");
 
 	if (CalculateFileHash(updateFilePath, updateFileHash)) {
 		char hashString[BLAKE2_HASH_STR_LENGTH];
@@ -551,7 +551,7 @@ try {
 	} finishedTrigger;
 
 	BPtr<char> manifestPath = GetConfigPathPtr(
-			"obs-studio\\updates\\manifest.json");
+			"lit-studio\\updates\\manifest.json");
 
 	auto ActiveOrGameCaptureLocked = [this] ()
 	{
@@ -606,7 +606,7 @@ try {
 	 * get current install GUID            */
 
 	/* NOTE: this is an arbitrary random number that we use to count the
-	 * number of unique OBS installations and is not associated with any
+	 * number of unique LIT installations and is not associated with any
 	 * kind of identifiable information */
 	const char *pguid = config_get_string(GetGlobalConfig(),
 			"General", "InstallGUID");
@@ -736,7 +736,7 @@ try {
 	 * execute updater                     */
 
 	BPtr<char> updateFilePath = GetConfigPathPtr(
-			"obs-studio\\updates\\updater.exe");
+			"lit-studio\\updates\\updater.exe");
 	BPtr<wchar_t> wUpdateFilePath;
 
 	size_t size = os_utf8_to_wcs_ptr(updateFilePath, 0, &wUpdateFilePath);
@@ -768,7 +768,7 @@ try {
 				updateFilePath.Get(), GetLastError());
 	}
 
-	/* force OBS to perform another update check immediately after updating
+	/* force LIT to perform another update check immediately after updating
 	 * in case of issues with the new version */
 	config_set_int(GetGlobalConfig(), "General", "LastUpdateCheck", 0);
 	config_set_int(GetGlobalConfig(), "General", "SkipUpdateVersion", 0);

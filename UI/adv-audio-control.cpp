@@ -185,7 +185,7 @@ OBSAdvAudioCtrl::~OBSAdvAudioCtrl()
 }
 
 /* ------------------------------------------------------------------------- */
-/* OBS source callbacks */
+/* LIT source callbacks */
 
 void OBSAdvAudioCtrl::OBSSourceFlagsChanged(void *param, calldata_t *calldata)
 {

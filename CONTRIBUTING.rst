@@ -1,11 +1,11 @@
-Contributing
+﻿Contributing
 ============
 
 Quick Links for Contributing
 ----------------------------
 
- - Compiling and building OBS Studio:
-   https://github.com/jp9000/obs-studio/wiki/Install-Instructions
+ - Compiling and building LIT Studio:
+   https://github.com/ca2/LIT/wiki/Install-Instructions
 
  - Our bug tracker (linked to forum accounts):
    https://obsproject.com/mantis/
@@ -22,7 +22,7 @@ Quick Links for Contributing
 Coding Guidelines
 -----------------
 
- - OBS Studio uses kernel normal form (linux variant), for more
+ - LIT Studio uses kernel normal form (linux variant), for more
    information, please read here:
    https://github.com/torvalds/linux/blob/master/Documentation/process/coding-style.rst
 
@@ -39,7 +39,7 @@ Coding Guidelines
 Commit Guidlines
 ----------------
 
- - OBS Studio uses the 50/72 standard for commits.  50 characters max
+ - LIT Studio uses the 50/72 standard for commits.  50 characters max
    for the title (excluding module prefix), an empty line, and then a
    full description of the commit, wrapped to 72 columns max.  See this
    link for more information: http://chris.beams.io/posts/git-commit/
@@ -86,5 +86,5 @@ Headers
                                 Front-end API
 
   If you would like to learn from example, examine the default plugins
-  (in the <plugins> subdirectory).  All features of OBS Studio are
+  (in the <plugins> subdirectory).  All features of LIT Studio are
   implemented as plugins.

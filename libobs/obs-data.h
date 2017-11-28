@@ -30,7 +30,7 @@ struct vec4;
 struct quat;
 
 /*
- * OBS data settings storage
+ * LIT data settings storage
  *
  *   This is used for retrieving or setting the data settings for things such
  * as sources, encoders, etc.  This is designed for JSON serialization.
@@ -350,7 +350,7 @@ EXPORT bool obs_data_item_get_autoselect_frames_per_second(
 		struct media_frames_per_second *fps, const char **option);
 
 /* ------------------------------------------------------------------------- */
-/* OBS-specific functions */
+/* LIT-specific functions */
 
 static inline obs_data_t *obs_data_newref(obs_data_t *data)
 {

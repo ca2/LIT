@@ -4,7 +4,7 @@
 #  LIBFDK_INCLUDE_DIRS
 #  LIBFDK_LIBRARIES
 #
-# For use in OBS: 
+# For use in LIT: 
 #
 #  Libfdk_INCLUDE_DIR
 

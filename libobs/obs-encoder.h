@@ -102,7 +102,7 @@ struct encoder_frame {
 /**
  * Encoder interface
  *
- * Encoders have a limited usage with OBS.  You are not generally supposed to
+ * Encoders have a limited usage with LIT.  You are not generally supposed to
  * implement every encoder out there.  Generally, these are limited or specific
  * encoders for h264/aac for streaming and recording.  It doesn't have to be
  * *just* h264 or aac of course, but generally those are the expected encoders.
@@ -134,7 +134,7 @@ struct obs_encoder_info {
 	 * Creates the encoder with the specified settings
 	 *
 	 * @param  settings  Settings for the encoder
-	 * @param  encoder   OBS encoder context
+	 * @param  encoder   LIT encoder context
 	 * @return           Data associated with this encoder context, or
 	 *                   NULL if initialization failed.
 	 */

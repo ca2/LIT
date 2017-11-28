@@ -42,7 +42,7 @@ using DisplayContext = OBSUniqueHandle<obs_display,
 static void CreateOBS()
 {
 	if (!obs_startup("en", nullptr))
-		throw "Couldn't create OBS";
+		throw "Couldn't create LIT";
 
 	struct obs_video_info ovi;
 	ovi.adapter         = 0;

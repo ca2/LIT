@@ -4,7 +4,7 @@
 #  LIBVLC_INCLUDE_DIRS
 #  LIBVLC_LIBRARIES
 #
-# For use in OBS: 
+# For use in LIT: 
 #
 #  VLC_INCLUDE_DIR
 

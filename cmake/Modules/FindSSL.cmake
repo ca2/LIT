@@ -4,7 +4,7 @@
 #  SSL_INCLUDE_DIRS
 #  SSL_LIBRARIES
 #
-# For use in OBS: 
+# For use in LIT: 
 #
 #  SSL_INCLUDE_DIR
 
